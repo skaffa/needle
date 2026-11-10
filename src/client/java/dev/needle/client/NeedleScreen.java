@@ -74,12 +74,13 @@ public final class NeedleScreen extends Screen {
 				"Music while playing: overworld, nether, end, underwater, creative, credits");
 		y = toggle(right, y, "Menu music", () -> c.scrobbleMenuMusic, v -> c.scrobbleMenuMusic = v, "Music on the title screen and other menus");
 		y = toggle(right, y, "Jukeboxes", () -> c.scrobbleJukebox, v -> c.scrobbleJukebox = v, "Music discs playing in jukeboxes near you");
-		y = toggle(right, y, "Need Master > 0%", () -> c.requireMasterVolume, v -> c.requireMasterVolume = v,
-				"Nothing counts while the Master volume slider is at 0%");
-		y = toggle(right, y, "Need Music > 0%", () -> c.requireMusicVolume, v -> c.requireMusicVolume = v,
-				"Game and menu music count only while the Music slider is above 0%");
-		y = toggle(right, y, "Need Jukebox > 0%", () -> c.requireJukeboxVolume, v -> c.requireJukeboxVolume = v,
-				"Jukebox songs count only while the Jukebox/Note Blocks slider is above 0%");
+		// one row per volume slider in Options > Music & Sounds, named as the game names them
+		y = sliderCheck(right, y, "Master", () -> c.requireMasterVolume, v -> c.requireMasterVolume = v,
+				"Master slider in Music & Sounds. When required, nothing counts while it is at 0%.");
+		y = sliderCheck(right, y, "Music", () -> c.requireMusicVolume, v -> c.requireMusicVolume = v,
+				"Music slider in Music & Sounds. When required, game and menu music count only while it is above 0%.");
+		y = sliderCheck(right, y, "Jukebox/Note Blocks", () -> c.requireJukeboxVolume, v -> c.requireJukeboxVolume = v,
+				"Jukebox/Note Blocks slider in Music & Sounds. When required, jukebox songs count only while it is above 0%.");
 		y = textField(right, y, "API key", c.apiKey, v -> c.apiKey = v,
 				"Your own Last.fm API key. Leave empty to use the one built into the mod.");
 		textField(right, y, "API secret", c.apiSecret, v -> c.apiSecret = v,
@@ -102,6 +103,22 @@ public final class NeedleScreen extends Screen {
 			b.setMessage(onOff(get.getAsBoolean()));
 		}).bounds(x + colW - bw, y, bw, H).tooltip(Tooltip.create(Component.literal(tip))).build());
 		return y + ROW;
+	}
+
+	/** A volume slider check: "Must be > 0%" or "Ignored", with a narrower button so the slider name fits. */
+	private int sliderCheck(int x, int y, String label, BooleanSupplier get, Consumer<Boolean> set, String tip) {
+		labels.add(new Label(label, x, y + 6, GRAY));
+		int bw = Math.max(60, colW - font.width("Jukebox/Note Blocks") - 6);
+		addRenderableWidget(Button.builder(sliderText(get.getAsBoolean()), b -> {
+			set.accept(!get.getAsBoolean());
+			changed();
+			b.setMessage(sliderText(get.getAsBoolean()));
+		}).bounds(x + colW - bw, y, bw, H).tooltip(Tooltip.create(Component.literal(tip))).build());
+		return y + ROW;
+	}
+
+	private static Component sliderText(boolean required) {
+		return Component.literal(required ? "Must be > 0%" : "Ignored");
 	}
 
 	private int number(int x, int y, String label, Supplier<String> text, Runnable dec, Runnable inc, String tip) {

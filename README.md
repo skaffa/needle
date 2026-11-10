@@ -4,7 +4,7 @@ Client-side Last.fm scrobbler for Minecraft 26.3 (Fabric). Scrobbles the game's 
 music discs you play in jukeboxes, counting only the time you actually hear a track. Works in
 singleplayer and on any server; no server mod.
 
-![HUD line while a jukebox plays](media/hud.png)
+![HUD line while a jukebox plays](media/gallery-jukebox.png)
 
 ## Use
 

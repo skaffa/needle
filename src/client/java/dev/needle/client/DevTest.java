@@ -30,6 +30,7 @@ import java.util.Optional;
  * <li>{@code pack}: a resource pack replacing a disc is not scrobbled (singleplayer)
  * <li>{@code offline}: scrobble while Last.fm is unreachable, queue, retry, flush (singleplayer)
  * <li>{@code screen}: settings screen buttons and text fields (title screen)
+ * <li>{@code gallery}: daytime screenshot of a playing jukebox with the HUD line, for the Modrinth gallery
  * <li>{@code server}: missed stop event and late join on a dedicated server (multiplayer, op)
  * </ul>
  * Singleplayer commands run on the integrated server, so test worlds need no cheats.
@@ -67,6 +68,7 @@ final class DevTest {
 			case "pack" -> pack(mc);
 			case "offline" -> offline(mc);
 			case "server" -> server(mc);
+			case "gallery" -> gallery(mc);
 			default -> jukeboxes(mc);
 		}
 		if (ticks % 100 == 0) {
@@ -98,6 +100,47 @@ final class DevTest {
 			case 1000 -> run(mc, "setblock " + xyz(b) + " minecraft:air");
 			case 1100 -> shot(mc, "3-end");
 			case 1120 -> finish(mc);
+			default -> {
+			}
+		}
+	}
+
+	// ---- gallery: a daytime screenshot of a jukebox playing with the HUD line ----
+
+	private static void gallery(Minecraft mc) {
+		// an untouched spot of the flat test world, away from earlier test builds
+		BlockPos stand = new BlockPos(200, -60, 200);
+		BlockPos box = stand.offset(0, 0, 4);
+		switch (ticks) {
+			case 1 -> {
+				// Last.fm's own rule for the shot, not the dev config's low test value (not saved)
+				NeedleClient.config.fraction = 0.5;
+				NeedleClient.config.maxRequiredMinutes = 4;
+				NeedleClient.config.showHud = true;
+				NeedleClient.tracker.setThreshold(NeedleClient.config.threshold());
+				mc.options.guiScale().set(4);
+			}
+			case 20 -> {
+				run(mc, "time set 6000");
+				run(mc, "weather clear");
+				run(mc, "gamerule spawn_mobs false");
+				run(mc, "tp @p " + (stand.getX() + 0.5) + " " + stand.getY() + " " + (stand.getZ() + 0.5) + " 0 22");
+				run(mc, "item replace entity @p weapon.mainhand with minecraft:music_disc_cat");
+			}
+			case 100 -> {
+				run(mc, "kill @e[type=!minecraft:player]");
+				jukebox(mc, box, "cat");
+				run(mc, "setblock " + xyz(box.offset(-1, 0, 0)) + " minecraft:poppy");
+				run(mc, "setblock " + xyz(box.offset(1, 0, 1)) + " minecraft:dandelion");
+				run(mc, "setblock " + xyz(box.offset(-2, 0, 2)) + " minecraft:oxeye_daisy");
+				run(mc, "setblock " + xyz(box.offset(2, 0, -1)) + " minecraft:cornflower");
+			}
+			case 500 -> shot(mc, "gallery");
+			case 540 -> {
+				run(mc, "fill " + xyz(box.offset(-2, 0, -1)) + " " + xyz(box.offset(2, 0, 2)) + " minecraft:air");
+				mc.options.guiScale().set(0);
+				finish(mc);
+			}
 			default -> {
 			}
 		}

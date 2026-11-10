@@ -127,7 +127,10 @@ public final class NeedleScreen extends Screen {
 		EditBox box = new EditBox(font, x + colW - bw, y, bw, H, Component.literal(label));
 		box.setMaxLength(64);
 		box.setValue(value);
-		box.setResponder(v -> set.accept(v.strip()));
+		box.setResponder(v -> {
+			set.accept(v.strip());
+			changed();
+		});
 		box.setTooltip(Tooltip.create(Component.literal(tip)));
 		addRenderableWidget(box);
 		return y + ROW;

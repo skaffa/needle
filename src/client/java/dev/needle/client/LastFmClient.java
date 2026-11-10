@@ -46,6 +46,10 @@ final class LastFmClient {
 	volatile int queueSize;
 	/** When the next retry runs (epoch ms), or 0. */
 	volatile long retryAtMs;
+	/** "Artist - Track" of the last Now Playing Last.fm accepted, for status and tests. */
+	volatile String lastNowPlaying;
+	/** Endpoint; only DevTest changes it (to simulate being offline). */
+	static volatile String apiUrl = LastFm.API_URL;
 
 	LastFmClient(NeedleConfig.Locations files, Supplier<NeedleConfig> config) {
 		this.files = files;
@@ -85,6 +89,8 @@ final class LastFmClient {
 				LastFm.ApiError error = LastFm.error(body);
 				if (error != null) {
 					handleBlocking(error);
+				} else {
+					lastNowPlaying = artist + " - " + track;
 				}
 			} catch (IOException | InterruptedException e) {
 				NeedleClient.LOG.debug("needle: now playing not sent", e);
@@ -280,7 +286,7 @@ final class LastFmClient {
 	}
 
 	private String post(LastFm.Request request) throws IOException, InterruptedException {
-		HttpRequest req = HttpRequest.newBuilder(URI.create(LastFm.API_URL))
+		HttpRequest req = HttpRequest.newBuilder(URI.create(apiUrl))
 				.timeout(Duration.ofSeconds(20))
 				.header("Content-Type", "application/x-www-form-urlencoded")
 				.header("User-Agent", "Needle Minecraft mod")

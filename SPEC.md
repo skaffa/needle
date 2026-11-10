@@ -193,6 +193,12 @@ Client (`src/client/java/dev/needle/client`):
   resource pack replacing a disc (must not scrobble), offline queue then reconnect.
   A test Last.fm account is needed for the end-to-end check.
 
+- Scripted in-game scenarios (`./run-scenario.sh <name>`, see `DevTest`): `1` two jukeboxes, `rules` pause /
+  mute / Now Playing / dimension change, `pack` resource-pack replacement, `offline` queue and retry,
+  `screen` settings screen, `server` walk-away and late join on a dedicated server (`./gradlew runServer`,
+  run-server/ with op NeedleTester). All passed 2026-11-10. Finding: in 26.3 the server sends a stop
+  event when the player leaves, so the song-length end is only a fallback.
+
 ## 11. Out of scope for v1
 
 Custom tracks (v2 config map), note blocks, `/playsound`,

@@ -23,6 +23,11 @@ loom {
 				property "needle.devtest", mode.isEmpty() ? "1" : mode
 			}
 		}
+		server {
+			// Vanilla test server for multiplayer checks (Needle is client-only and not loaded there).
+			runDir "run-server"
+			vmArgs "-Xms256M", "-Xmx1G"
+		}
 	}
 
 	mods {

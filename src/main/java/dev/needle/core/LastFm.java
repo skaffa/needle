@@ -34,8 +34,12 @@ public final class LastFm {
 		}
 	}
 
-	/** One track in a scrobble batch. */
-	public record Scrobble(String artist, String track, long timestampEpochS, int durationS, boolean chosenByUser) {
+	/** One track in a scrobble batch. {@code album} may be null or empty (queue files from before albums). */
+	public record Scrobble(String artist, String track, long timestampEpochS, int durationS, boolean chosenByUser,
+			String album) {
+		public Scrobble(String artist, String track, long timestampEpochS, int durationS, boolean chosenByUser) {
+			this(artist, track, timestampEpochS, durationS, chosenByUser, null);
+		}
 	}
 
 	public record Session(String name, String key) {
@@ -99,12 +103,15 @@ public final class LastFm {
 	}
 
 	public static Request updateNowPlaying(String apiKey, String secret, String sessionKey, String artist,
-			String track, int durationS) {
+			String track, String album, int durationS) {
 		TreeMap<String, String> p = new TreeMap<>();
 		p.put("method", "track.updateNowPlaying");
 		p.put("sk", sessionKey);
 		p.put("artist", artist);
 		p.put("track", track);
+		if (album != null && !album.isBlank()) {
+			p.put("album", album);
+		}
 		if (durationS > 0) {
 			p.put("duration", Integer.toString(durationS));
 		}
@@ -122,6 +129,9 @@ public final class LastFm {
 			Scrobble s = batch.get(i);
 			p.put("artist[" + i + "]", s.artist());
 			p.put("track[" + i + "]", s.track());
+			if (s.album() != null && !s.album().isBlank()) {
+				p.put("album[" + i + "]", s.album());
+			}
 			p.put("timestamp[" + i + "]", Long.toString(s.timestampEpochS()));
 			if (s.durationS() > 0) {
 				p.put("duration[" + i + "]", Integer.toString(s.durationS()));

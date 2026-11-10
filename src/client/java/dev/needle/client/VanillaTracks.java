@@ -4,6 +4,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
+import dev.needle.core.Albums;
 import dev.needle.core.ListenTracker;
 import dev.needle.core.OggDuration;
 import dev.needle.core.TrackName;
@@ -47,6 +48,7 @@ final class VanillaTracks {
 	/** Lengths of vanilla music files by sound path. Vanilla files never change, so this is never cleared. */
 	private static final Map<Identifier, CompletableFuture<Long>> LENGTHS = new ConcurrentHashMap<>();
 	private static final Set<String> LOGGED = new HashSet<>();
+	private static Albums albums;
 
 	private VanillaTracks() {
 	}
@@ -69,7 +71,8 @@ final class VanillaTracks {
 			return remember(sound, null, "not a minecraft music file");
 		}
 		// same key the vanilla Now Playing toast uses: music/game/sweden -> music.game.sweden
-		TrackName name = TrackName.parse(names(mc).get(location.getPath().replace('/', '.')));
+		String langKey = location.getPath().replace('/', '.');
+		TrackName name = TrackName.parse(names(mc).get(langKey));
 		if (name == null) {
 			return remember(sound, null, "no en_us name");
 		}
@@ -88,7 +91,7 @@ final class VanillaTracks {
 		if (!length.isDone()) {
 			return null; // try again next tick; nothing is cached yet
 		}
-		return remember(sound, new ListenTracker.Track(location.getPath(), name, length.join()), null);
+		return remember(sound, new ListenTracker.Track(location.getPath(), name, length.join(), album(langKey)), null);
 	}
 
 	/** The jukebox song as a track, or null when it is not a built-in disc. */
@@ -105,7 +108,8 @@ final class VanillaTracks {
 		if (key.isEmpty() || !key.get().identifier().getNamespace().equals(Identifier.DEFAULT_NAMESPACE)) {
 			return remember(sound, null, "not a minecraft disc");
 		}
-		TrackName name = TrackName.parse(names(mc).get("jukebox_song.minecraft." + key.get().identifier().getPath()));
+		String langKey = "jukebox_song.minecraft." + key.get().identifier().getPath();
+		TrackName name = TrackName.parse(names(mc).get(langKey));
 		if (name == null) {
 			return remember(sound, null, "no en_us name");
 		}
@@ -113,7 +117,19 @@ final class VanillaTracks {
 			return remember(sound, null, "file replaced by a resource pack");
 		}
 		long lengthMs = (long) (song.value().lengthInSeconds() * 1000);
-		return remember(sound, new ListenTracker.Track(sound.getLocation().getPath(), name, lengthMs), null);
+		return remember(sound, new ListenTracker.Track(sound.getLocation().getPath(), name, lengthMs, album(langKey)), null);
+	}
+
+	private static String album(String langKey) {
+		if (albums == null) {
+			try {
+				albums = Albums.bundled();
+			} catch (Exception e) {
+				NeedleClient.LOG.error("needle: could not read the album table; scrobbling without albums", e);
+				albums = Albums.parse(new java.io.StringReader("{}"));
+			}
+		}
+		return albums.album(langKey);
 	}
 
 	/** The sound file as the game will play it, only when it comes from the vanilla pack. */

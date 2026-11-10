@@ -73,7 +73,7 @@ final class LastFmClient {
 		});
 	}
 
-	void nowPlaying(String artist, String track, int durationS) {
+	void nowPlaying(String artist, String track, String album, int durationS) {
 		exec.execute(() -> {
 			NeedleConfig cfg = config.get();
 			LastFm.Session s = session;
@@ -81,7 +81,7 @@ final class LastFmClient {
 				return;
 			}
 			try {
-				String body = post(LastFm.updateNowPlaying(cfg.effectiveApiKey(), cfg.effectiveApiSecret(), s.key(), artist, track, durationS));
+				String body = post(LastFm.updateNowPlaying(cfg.effectiveApiKey(), cfg.effectiveApiSecret(), s.key(), artist, track, album, durationS));
 				LastFm.ApiError error = LastFm.error(body);
 				if (error != null) {
 					handleBlocking(error);

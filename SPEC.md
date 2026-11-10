@@ -108,8 +108,12 @@ call per 15 s. Disabled by `sendNowPlaying = false`.
 - **Login** (`/needle login`): `auth.getToken` → chat shows a clickable link to
   `https://www.last.fm/api/auth/?api_key=…&token=…` → poll `auth.getSession` every 5 s for up to 5 min →
   store the session key and user name. `/needle logout` deletes them.
-- **Scrobble**: `track.scrobble` with `artist, track, timestamp, duration` (album omitted in v1;
-  `chosenByUser = 0` for game music, `1` for jukeboxes).
+- **Scrobble**: `track.scrobble` with `artist, track, album, timestamp, duration`
+  (`chosenByUser = 0` for game music, `1` for jukeboxes). Now Playing sends `album` too.
+- **Albums**: the game has no album data, so `src/main/resources/needle/albums.json` maps each en_us key to
+  an album. Names match the Last.fm album pages with the most listeners (checked 2026-11-10, e.g.
+  "Minecraft - Volume Alpha", "Minecraft: Caves & Cliffs (Original Game Soundtrack)"). 90 of the 92 tracks
+  in 26.3 are listed; Boss and Lava Chicken have no clear release and are sent without an album.
 - **Queue**: every scrobble is first appended to `config/needle/queue.json`, then sent in batches of up to
   50. Removed only on success. Retry with backoff (30 s doubling to 30 min) on network errors and on
   Last.fm errors 11, 16, 29. Errors 9 (invalid session) stops sending and tells the player to log in again.
@@ -188,5 +192,5 @@ Client (`src/client/java/dev/needle/client`):
 
 ## 11. Out of scope for v1
 
-Custom tracks (v2 config map), album names, Mod Menu config screen, note blocks, `/playsound`,
+Custom tracks (v2 config map), Mod Menu config screen, note blocks, `/playsound`,
 music from other mods.

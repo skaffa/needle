@@ -120,12 +120,12 @@ public final class NeedleClient implements ClientModInitializer {
 			switch (event) {
 				case ListenTracker.NowPlaying np -> {
 					if (config.sendNowPlaying) {
-						lastFm.nowPlaying(np.track().name().artist(), np.track().name().title(), durationS(np.track()));
+						lastFm.nowPlaying(np.track().name().artist(), np.track().name().title(), np.track().album(), durationS(np.track()));
 					}
 				}
 				case ListenTracker.Scrobble s -> {
 					lastFm.enqueue(new LastFm.Scrobble(s.track().name().artist(), s.track().name().title(), s.timestampEpochS(),
-							durationS(s.track()), s.kind() == ListenTracker.Kind.JUKEBOX));
+							durationS(s.track()), s.kind() == ListenTracker.Kind.JUKEBOX, s.track().album()));
 					LOG.info("needle: scrobbled {}", s.track().name());
 					if (config.chatOnScrobble) {
 						say("scrobbled " + s.track().name());

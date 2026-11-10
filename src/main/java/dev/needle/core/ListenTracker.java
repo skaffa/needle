@@ -18,8 +18,18 @@ public final class ListenTracker {
 		MENU_MUSIC, GAME_MUSIC, JUKEBOX
 	}
 
-	/** A built-in track. {@code lengthMs <= 0} means unknown (Now Playing only, never scrobbled). */
-	public record Track(String id, TrackName name, long lengthMs) {
+	/**
+	 * A built-in track. {@code lengthMs <= 0} means unknown (Now Playing only, never scrobbled);
+	 * {@code album} is "" when unknown.
+	 */
+	public record Track(String id, TrackName name, long lengthMs, String album) {
+		public Track {
+			album = album == null ? "" : album;
+		}
+
+		public Track(String id, TrackName name, long lengthMs) {
+			this(id, name, lengthMs, "");
+		}
 	}
 
 	/**

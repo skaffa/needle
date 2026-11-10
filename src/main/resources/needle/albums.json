@@ -1,0 +1,117 @@
+{
+	"_comment": "Album for each built-in track, keyed by its en_us.json key. Album names match the Last.fm album pages with the most listeners (checked 2026-11-10). Tracks not listed are scrobbled without an album.",
+	"Minecraft - Volume Alpha": [
+		"jukebox_song.minecraft.13",
+		"jukebox_song.minecraft.cat",
+		"music.game.clark",
+		"music.game.danny",
+		"music.game.dry_hands",
+		"music.game.haggstrom",
+		"music.game.key",
+		"music.game.living_mice",
+		"music.game.mice_on_venus",
+		"music.game.minecraft",
+		"music.game.oxygene",
+		"music.game.subwoofer_lullaby",
+		"music.game.sweden",
+		"music.game.wet_hands"
+	],
+	"Minecraft - Volume Beta": [
+		"jukebox_song.minecraft.11",
+		"jukebox_song.minecraft.blocks",
+		"jukebox_song.minecraft.chirp",
+		"jukebox_song.minecraft.far",
+		"jukebox_song.minecraft.mall",
+		"jukebox_song.minecraft.mellohi",
+		"jukebox_song.minecraft.stal",
+		"jukebox_song.minecraft.strad",
+		"jukebox_song.minecraft.wait",
+		"jukebox_song.minecraft.ward",
+		"music.game.creative.aria_math",
+		"music.game.creative.biome_fest",
+		"music.game.creative.blind_spots",
+		"music.game.creative.dreiton",
+		"music.game.creative.haunt_muskie",
+		"music.game.creative.taswell",
+		"music.game.end.alpha",
+		"music.game.end.the_end",
+		"music.game.nether.ballad_of_the_cats",
+		"music.game.nether.concrete_halls",
+		"music.game.nether.dead_voxel",
+		"music.game.nether.warmth",
+		"music.menu.beginning_2",
+		"music.menu.floating_trees",
+		"music.menu.moog_city_2",
+		"music.menu.mutation"
+	],
+	"Minecraft: Nether Update (Original Game Soundtrack)": [
+		"jukebox_song.minecraft.pigstep",
+		"music.game.nether.crimson_forest.chrysopoeia",
+		"music.game.nether.nether_wastes.rubedo",
+		"music.game.nether.soulsand_valley.so_below"
+	],
+	"Minecraft: Caves & Cliffs (Original Game Soundtrack)": [
+		"jukebox_song.minecraft.otherside",
+		"music.game.an_ordinary_day",
+		"music.game.ancestry",
+		"music.game.comforting_memories",
+		"music.game.floating_dream",
+		"music.game.infinite_amethyst",
+		"music.game.left_to_bloom",
+		"music.game.one_more_day",
+		"music.game.stand_tall",
+		"music.game.wending"
+	],
+	"Minecraft: Wild Update (Original Game Soundtrack)": [
+		"jukebox_song.minecraft.5",
+		"music.game.swamp.aerie",
+		"music.game.swamp.firebugs",
+		"music.game.swamp.labyrinthine"
+	],
+	"Minecraft: Trails & Tales (Original Game Soundtrack)": [
+		"jukebox_song.minecraft.relic",
+		"music.game.a_familiar_room",
+		"music.game.bromeliad",
+		"music.game.crescent_dunes",
+		"music.game.echo_in_the_wind"
+	],
+	"Minecraft: Tricky Trials (Original Game Soundtrack)": [
+		"jukebox_song.minecraft.creator",
+		"jukebox_song.minecraft.creator_music_box",
+		"jukebox_song.minecraft.precipice",
+		"music.game.deeper",
+		"music.game.eld_unknown",
+		"music.game.endless",
+		"music.game.featherfall",
+		"music.game.komorebi",
+		"music.game.pokopoko",
+		"music.game.puzzlebox",
+		"music.game.watcher",
+		"music.game.yakusoku"
+	],
+	"Minecraft: Game Drop 2 - 2025 (Original Game Soundtrack)": [
+		"jukebox_song.minecraft.tears",
+		"music.game.below_and_above",
+		"music.game.broken_clocks",
+		"music.game.fireflies",
+		"music.game.lilypad",
+		"music.game.os_piano"
+	],
+	"Minecraft: Chaos Cubed (Original Game Soundtrack)": [
+		"jukebox_song.minecraft.bounce",
+		"music.game.ebb",
+		"music.game.home",
+		"music.game.memories",
+		"music.game.nightly",
+		"music.game.shores"
+	],
+	"Axolotl": [
+		"music.game.water.axolotl"
+	],
+	"Dragon Fish": [
+		"music.game.water.dragon_fish"
+	],
+	"Shuniji": [
+		"music.game.water.shuniji"
+	]
+}

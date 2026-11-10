@@ -146,6 +146,32 @@ class CoreTest {
 	}
 
 	@Test
+	void albumSentWhenKnown() {
+		LastFm.Request r = LastFm.scrobble("K", "S", "SK", List.of(
+				new LastFm.Scrobble("C418", "Sweden", 100, 215, false, "Minecraft - Volume Alpha"),
+				new LastFm.Scrobble("C418", "Boss", 200, 200, false, ""),
+				new LastFm.Scrobble("C418", "cat", 300, 185, true)));
+		assertEquals("Minecraft - Volume Alpha", r.params().get("album[0]"));
+		assertNull(r.params().get("album[1]"));
+		assertNull(r.params().get("album[2]"), "old queue entries have no album");
+		LastFm.Request np = LastFm.updateNowPlaying("K", "S", "SK", "C418", "Sweden", "Minecraft - Volume Alpha", 215);
+		assertEquals("Minecraft - Volume Alpha", np.params().get("album"));
+		assertNull(LastFm.updateNowPlaying("K", "S", "SK", "C418", "Boss", "", 0).params().get("album"));
+	}
+
+	@Test
+	void bundledAlbumTable() throws IOException {
+		Albums a = Albums.bundled();
+		assertEquals(90, a.size(), "92 vanilla tracks in 26.3, minus Boss and Lava Chicken");
+		assertEquals("Minecraft - Volume Alpha", a.album("music.game.sweden"));
+		assertEquals("Minecraft - Volume Beta", a.album("jukebox_song.minecraft.far"));
+		assertEquals("Minecraft: Wild Update (Original Game Soundtrack)", a.album("jukebox_song.minecraft.5"));
+		assertEquals("", a.album("music.game.end.boss"));
+		assertThrows(IllegalArgumentException.class,
+				() -> Albums.parse(new java.io.StringReader("{\"A\":[\"x\"],\"B\":[\"x\"]}")), "one key, two albums");
+	}
+
+	@Test
 	void parsesResponses() {
 		assertEquals("abc", LastFm.token("{\"token\":\"abc\"}"));
 		assertEquals(new LastFm.Session("skaffa", "k1"), LastFm.session("{\"session\":{\"name\":\"skaffa\",\"key\":\"k1\",\"subscriber\":0}}"));

@@ -14,6 +14,7 @@ import net.minecraft.server.MinecraftServer;
  */
 final class DevTest {
 	static final boolean ON = !System.getProperty("needle.devtest", "").isEmpty();
+	private static final boolean SCREEN = "screen".equals(System.getProperty("needle.devtest", ""));
 	private static int ticks = -1;
 	private static BlockPos origin;
 
@@ -21,6 +22,10 @@ final class DevTest {
 	}
 
 	static void tick(Minecraft mc) {
+		if (SCREEN) {
+			screenTick(mc);
+			return;
+		}
 		if (!ON || mc.level == null || mc.player == null || mc.getSingleplayerServer() == null) {
 			return;
 		}
@@ -58,6 +63,18 @@ final class DevTest {
 			}
 			sb.append("\n  queue=").append(NeedleClient.lastFm.queueSize);
 			NeedleClient.LOG.info(sb.toString());
+		}
+	}
+
+	/** Settings screen over the title screen: open, screenshot, quit. */
+	private static void screenTick(Minecraft mc) {
+		ticks++;
+		switch (ticks) {
+			case 200 -> mc.gui.setScreen(new NeedleScreen(mc.gui.screen()));
+			case 240 -> shot(mc, "screen");
+			case 260 -> mc.stop();
+			default -> {
+			}
 		}
 	}
 

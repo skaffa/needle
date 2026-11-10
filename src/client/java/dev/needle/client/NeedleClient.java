@@ -48,6 +48,7 @@ public final class NeedleClient implements ClientModInitializer {
 	private static SoundInstance music;
 	private static long musicStartedAtS;
 	private static boolean musicInMenu;
+	private static boolean openScreen;
 
 	@Override
 	public void onInitializeClient() {
@@ -78,10 +79,13 @@ public final class NeedleClient implements ClientModInitializer {
 					c.getSource().sendFeedback(prefix("sending queued scrobbles"));
 					return 1;
 				}))
+				.then(literal("config").executes(c -> {
+					openScreen = true; // chat closes after the command; open on the next tick
+					return 1;
+				}))
 				.then(literal("reload").executes(c -> {
 					config = NeedleConfig.load(FILES.config());
-					tracker.setThreshold(config.threshold());
-					lastFm.configChanged();
+					applyConfig();
 					c.getSource().sendFeedback(prefix("config reloaded"));
 					return 1;
 				}))));
@@ -90,6 +94,10 @@ public final class NeedleClient implements ClientModInitializer {
 
 	private static void tick(Minecraft mc) {
 		DevTest.tick(mc);
+		if (openScreen) {
+			openScreen = false;
+			mc.gui.setScreen(new NeedleScreen(null));
+		}
 		if (!config.enabled) {
 			tracker.reset();
 			return;
@@ -181,6 +189,14 @@ public final class NeedleClient implements ClientModInitializer {
 	static String time(long ms) {
 		long s = ms / 1000;
 		return s / 60 + ":" + String.format("%02d", s % 60);
+	}
+
+	/** After any settings change (screen or /needle reload): clamp, save, and pass it on. */
+	static void applyConfig() {
+		config.clamp();
+		saveConfig();
+		tracker.setThreshold(config.threshold());
+		lastFm.configChanged();
 	}
 
 	static void saveConfig() {

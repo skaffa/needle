@@ -13,6 +13,9 @@
 	"entrypoints": {
 		"client": [
 			"dev.needle.client.NeedleClient"
+		],
+		"modmenu": [
+			"dev.needle.client.compat.ModMenuIntegration"
 		]
 	},
 	"mixins": [
@@ -26,5 +29,8 @@
 		"minecraft": "~26.3",
 		"java": ">=25",
 		"fabric-api": "*"
+	},
+	"suggests": {
+		"modmenu": "*"
 	}
 }

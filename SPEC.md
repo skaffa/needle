@@ -152,7 +152,10 @@ Menu vs game music is decided by whether `Minecraft.level` is null when the trac
 ## 8. Commands and HUD
 
 - `/needle status`: login, enabled, queue size, focus listen with `listened / required`, other listens.
-- `/needle login`, `/needle logout`, `/needle pause`, `/needle resume`, `/needle flush` (send queue now).
+- `/needle login`, `/needle logout`, `/needle pause`, `/needle resume`, `/needle flush` (send queue now),
+  `/needle reload` (re-read config.json).
+- Settings screen with every config option and the Last.fm login state: Mod Menu "Configure" button, or
+  `/needle config`. Changes apply and save immediately.
 - HUD (when `showHud`): one line top-left, e.g. `♪ C418 - Sweden  1:12 / 2:00`; `✓` once scrobbled;
   grey when the focus listen is not gaining time.
 - Chat message on each scrobble is off by default (`chatOnScrobble`, add if wanted).
@@ -192,5 +195,5 @@ Client (`src/client/java/dev/needle/client`):
 
 ## 11. Out of scope for v1
 
-Custom tracks (v2 config map), Mod Menu config screen, note blocks, `/playsound`,
+Custom tracks (v2 config map), note blocks, `/playsound`,
 music from other mods.

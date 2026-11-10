@@ -16,9 +16,11 @@ loom {
 		client {
 			// Keep the dev game small enough for 8 GB machines.
 			vmArgs "-Xms256M", "-Xmx2G"
-			// ./gradlew runClient -Pdevtest: scripted jukebox test in a singleplayer world (see DevTest)
+			// ./gradlew runClient -Pdevtest: scripted jukebox test in a singleplayer world;
+			// -Pdevtest=screen: screenshot of the settings screen from the title screen (see DevTest)
 			if (project.hasProperty("devtest")) {
-				property "needle.devtest", "1"
+				def mode = project.property("devtest").toString()
+				property "needle.devtest", mode.isEmpty() ? "1" : mode
 			}
 		}
 	}

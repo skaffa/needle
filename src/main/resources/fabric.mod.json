@@ -8,6 +8,11 @@
 		"Skaffa",
 		"Claude (Anthropic)"
 	],
+	"contact": {
+		"homepage": "https://github.com/skaffa/needle",
+		"sources": "https://github.com/skaffa/needle",
+		"issues": "https://github.com/skaffa/needle/issues"
+	},
 	"license": "MIT",
 	"icon": "assets/needle/icon.png",
 	"environment": "client",

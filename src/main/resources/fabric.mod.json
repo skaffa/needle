@@ -9,6 +9,7 @@
 		"Claude (Anthropic)"
 	],
 	"license": "MIT",
+	"icon": "assets/needle/icon.png",
 	"environment": "client",
 	"entrypoints": {
 		"client": [

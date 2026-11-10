@@ -1,0 +1,30 @@
+{
+	"schemaVersion": 1,
+	"id": "needle",
+	"version": "${version}",
+	"name": "Needle",
+	"description": "Client-side Last.fm scrobbler for Minecraft's own music and jukebox songs. Counts only the time you actually hear a track.",
+	"authors": [
+		"Skaffa",
+		"Claude (Anthropic)"
+	],
+	"license": "MIT",
+	"environment": "client",
+	"entrypoints": {
+		"client": [
+			"dev.needle.client.NeedleClient"
+		]
+	},
+	"mixins": [
+		{
+			"config": "needle.client.mixins.json",
+			"environment": "client"
+		}
+	],
+	"depends": {
+		"fabricloader": ">=0.20.1",
+		"minecraft": "~26.3",
+		"java": ">=25",
+		"fabric-api": "*"
+	}
+}

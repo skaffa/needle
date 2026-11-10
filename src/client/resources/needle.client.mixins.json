@@ -1,0 +1,12 @@
+{
+	"required": true,
+	"package": "dev.needle.client.mixin",
+	"compatibilityLevel": "JAVA_25",
+	"client": [
+		"LevelEventHandlerMixin",
+		"MusicManagerAccessor"
+	],
+	"injectors": {
+		"defaultRequire": 1
+	}
+}

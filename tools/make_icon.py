@@ -2,7 +2,7 @@
 
 Style: dark rounded-square badge (#10161C) with 4-px stepped corners, soft radial glow, a block
 character with a cute face, cream 4-point sparkles. Subject: a wooden jukebox cube with a music disc
-standing in its slot (Last.fm-red label) and a music note.
+(Last.fm-red label) lying on top, a tonearm resting its needle on the record, and a music note.
 
 Usage: python tools/make_icon.py  -> media/icon.png (512), media/icon-128.png (128),
                                      src/main/resources/assets/needle/icon.png (128)
@@ -70,24 +70,10 @@ def main(out_dir, asset):
             t = max(0.0, 1 - d) ** 1.6
             px[y][x] = tuple(round(BG[i] + (GLOW[i] - BG[i]) * t) for i in range(3)) + (255,)
 
-    # music disc standing upright in the jukebox slot (drawn first; the cube hides its lower part)
-    dx, dy, r = 16, 10.5, 6.6
-    for y in range(N):
-        for x in range(N):
-            d = math.hypot(x + 0.5 - dx, y + 0.5 - dy) / r
-            if d <= 1.0:
-                c = DISC
-                if 0.58 <= d <= 0.72 or d > 0.88:
-                    c = GROOVE  # one groove ring, and the rim so the record stands out from the badge
-                if d < 0.36:
-                    c = LABEL
-                put(x, y, c)
-    for x, y in ((12, 6), (13, 5), (11, 7)):
-        put(x, y, SHINE)  # light on the record's upper left edge
-    put(16, 10, SPINDLE)
-
-    # isometric jukebox cube with a face
-    xc, yc, W, H, F = 16, 17, 8, 4, 7
+    # jukebox cube with a face, seen a little more from above than true isometric so the lid has
+    # room for the record (slope K instead of 1/2)
+    xc, yc, W, H, F = 16, 15, 9, 6, 7
+    K = H / W
     for y in range(N):
         for x in range(N):
             fx, fy = x + 0.5, y + 0.5
@@ -95,34 +81,66 @@ def main(out_dir, asset):
                 put(x, y, TOP)
                 continue
             if xc - W <= fx < xc:
-                te = yc + (fx - (xc - W)) / 2
+                te = yc + (fx - (xc - W)) * K
                 if te <= fy < te + F:
                     put(x, y, LEFT)
             elif xc <= fx < xc + W:
-                te = yc + ((xc + W) - fx) / 2
+                te = yc + ((xc + W) - fx) * K
                 if te <= fy < te + F:
                     put(x, y, RIGHT)
     for x in range(xc - W, xc + W):
         fx = x + 0.5
-        top = yc + ((fx - (xc - W)) if fx < xc else ((xc + W) - fx)) / 2
+        top = yc + ((fx - (xc - W)) if fx < xc else ((xc + W) - fx)) * K
         put(x, math.floor(top - 0.01), RIM)
-    # the slot the disc stands in
-    for x in range(10, 23):
-        put(x, 16, EDGE)
+    # dark outline along the back edges, so the top reads as a flat lid and not a bowl
+    for x in range(xc - W, xc + W):
+        fx = x + 0.5
+        back = yc - H * (1 - abs(fx - xc) / W)
+        put(x, math.ceil(back - 0.5) - 1, EDGE)
     for y in range(int(yc + H), int(yc + H + F)):
         put(16, y, EDGE)
-    for ex, ey in ((11, 21), (13, 22)):
+    for ex, ey in ((11, 20), (13, 21)):
         for dy in range(3):
             put(ex, ey + dy, EYE)
         put(ex, ey, EYE_HI)
 
+    # music disc lying on the lid, with a ring of wood around it
+    dx, dy, rx, ry = 16, 15, 5.6, 3.4
+    for y in range(N):
+        for x in range(N):
+            ex = (x + 0.5 - dx) / rx
+            ey = (y + 0.5 - dy) / ry
+            e = math.hypot(ex, ey)
+            if e <= 1.0:
+                c = DISC
+                if 0.58 <= e <= 0.74:
+                    c = GROOVE
+                if e < 0.36:
+                    c = LABEL
+                put(x, y, c)
+    put(12, 13, SHINE)  # light catching the record
+    put(13, 12, SHINE)
+    put(15, 15, SPINDLE)
+    put(16, 15, SPINDLE)
+
+    # tonearm: hub on a post at the right of the lid, arm down to the needle on the groove
+    for y in (12, 13, 14):
+        put(24, y, ARM_DARK)
+    put(23, 10, ARM)
+    put(24, 10, ARM)
+    put(23, 11, ARM_DARK)
+    put(24, 11, ARM_DARK)
+    for x, y in ((22, 11), (21, 12), (20, 13)):
+        put(x, y, ARM)
+    put(19, 14, ARM_DARK)  # needle head on the groove
+
     # eighth note, top left
-    for y in range(6, 11):
-        put(6, y, NOTE)
-    put(7, 6, NOTE)
-    put(8, 7, NOTE)
-    put(8, 8, NOTE)
-    for x, y in ((4, 10), (5, 10), (4, 11), (5, 11), (6, 11)):
+    for y in range(5, 10):
+        put(9, y, NOTE)
+    put(10, 5, NOTE)
+    put(11, 6, NOTE)
+    put(11, 7, NOTE)
+    for x, y in ((7, 9), (8, 9), (7, 10), (8, 10), (9, 10)):
         put(x, y, NOTE)
 
     def sparkle(x, y, strong=True):

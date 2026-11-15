@@ -11,7 +11,7 @@ import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 
 /**
- * Player settings, saved in {@code config/needle/config.json} (SPEC.md section 7). Safe to share: the
+ * Player settings, saved in {@code config/needle/config.json}. Safe to share: the
  * Last.fm login lives in {@code session.json} next to it.
  */
 public final class NeedleConfig {

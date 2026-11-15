@@ -34,7 +34,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * Decides whether a playing sound is a built-in track (SPEC.md section 2) and builds its {@link
+ * Decides whether a playing sound is a built-in track and builds its {@link
  * ListenTracker.Track}: name from the vanilla {@code en_us.json}, length from the song definition or the
  * {@code .ogg} file. Main thread only, except the Ogg reads, which run in the background.
  */

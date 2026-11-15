@@ -4,7 +4,7 @@ Client-side Last.fm scrobbler for Minecraft 26.3 (Fabric). Scrobbles the game's 
 music discs you play in jukeboxes, counting only the time you actually hear a track. Works in
 singleplayer and on any server; no server mod.
 
-![HUD line while a jukebox plays](media/gallery-jukebox.png)
+![HUD line while a jukebox plays](https://raw.githubusercontent.com/skaffa/needle/cef80bf873112fc320eef2eb79fdbd40ec878055/media/gallery-jukebox.png)
 
 ## Use
 
@@ -50,7 +50,7 @@ it private), `queue.json` (scrobbles not sent yet).
 | `chatOnScrobble` | `false` | Chat message per scrobble |
 | `apiKey`, `apiSecret` | empty | Your own Last.fm API key, replacing the built-in one |
 
-![Settings screen](media/settings.png)
+![Settings screen](https://raw.githubusercontent.com/skaffa/needle/cef80bf873112fc320eef2eb79fdbd40ec878055/media/settings.png)
 
 ## Privacy
 
@@ -76,23 +76,6 @@ lastfm.apiSecret=...
 
 Without these properties the jar has no built-in key, and players must set `apiKey` and `apiSecret`
 themselves.
-
-### Scripted in-game checks
-
-`./run-scenario.sh <name>` starts the dev client, runs one scenario and prints `CHECK PASS` /
-`CHECK FAIL` lines. Singleplayer scenarios use the world `needletest` in `run/saves`:
-
-```
-./run-scenario.sh rules --args="--quickPlaySingleplayer needletest"     # pause, muting, Now Playing, dimensions
-./run-scenario.sh pack --args="--quickPlaySingleplayer needletest"      # resource pack replacing a disc
-./run-scenario.sh offline --args="--quickPlaySingleplayer needletest"   # queue and retry
-./run-scenario.sh 1 --args="--quickPlaySingleplayer needletest"         # two jukeboxes, focus and resume
-./run-scenario.sh screen                                                # settings screen
-./gradlew runServer --args=nogui                                        # then, in another shell:
-./run-scenario.sh server --args="--username NeedleTester --quickPlayMultiplayer localhost:25565"
-```
-
-These scrobble to the logged-in Last.fm account. See [SPEC.md](SPEC.md) for the design and limits.
 
 ## License
 

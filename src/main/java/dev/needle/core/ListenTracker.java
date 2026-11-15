@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * The focus model from SPEC.md section 5. Each tick the client reports every playing track instance
+ * The focus model. Each tick the client reports every playing track instance
  * ({@link Source}); instances of the same track share one {@link Listen}. Exactly one listen has focus
  * per tick and only that one gains listening time, so the counters can never add up to more than real
  * time. Pure logic: no Minecraft classes, no clock of its own.
@@ -35,7 +35,7 @@ public final class ListenTracker {
 	/**
 	 * One playing sound instance this tick.
 	 *
-	 * @param audible         loud enough, not paused, in range (the client decides; see SPEC.md section 4)
+	 * @param audible         loud enough, not paused, in range (the client decides)
 	 * @param distance        blocks from the player to a jukebox; ignored for music
 	 * @param startedAtEpochS when this instance started, in Unix seconds (the scrobble timestamp)
 	 */
